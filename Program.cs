@@ -15,8 +15,6 @@
  * Make sense so far? Now let's look at what we'd do in real code.
 */
 
-using Microsoft.VisualBasic;
-
 class StringCharManipulation
 {
     public Random random = new Random();
