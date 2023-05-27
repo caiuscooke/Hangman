@@ -88,109 +88,117 @@ class Hangman
 
     public void DisplayHangMan(int incorrectGuesses)
     {
-        if (incorrectGuesses == 0)
+        switch (incorrectGuesses)
         {
-            Console.WriteLine("==================");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 1)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 2)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|              0");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 3)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|              0");
-            Console.WriteLine("|             ~=~");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 4)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|              0");
-            Console.WriteLine("|             ~=~");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 5)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|              0");
-            Console.WriteLine("|             ~=~");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|             /");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
-        }
-        if (incorrectGuesses == 6)
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("|              |");
-            Console.WriteLine("|              0");
-            Console.WriteLine("|             ~=~");
-            Console.WriteLine("|              |");
-            Console.WriteLine(@"|             / \");
-            Console.WriteLine("|");
-            Console.WriteLine("|");
-            Console.WriteLine("==================");
+            case (0):
+                Console.WriteLine("==================");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+            case (1):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+
+            case (2):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|              0");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+        
+            case(3):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|              0");
+                Console.WriteLine("|             ~=~");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+
+            case (4):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|              0");
+                Console.WriteLine("|             ~=~");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+
+            case (5):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|              0");
+                Console.WriteLine("|             ~=~");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|             /");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
+            case (6):
+                Console.WriteLine("==================");
+                Console.WriteLine("|              |");
+                Console.WriteLine("|              0");
+                Console.WriteLine("|             ~=~");
+                Console.WriteLine("|              |");
+                Console.WriteLine(@"|             / \");
+                Console.WriteLine("|");
+                Console.WriteLine("|");
+                Console.WriteLine("==================");
+                break;
         }
     } // displays 6 different types of hangman boards
 
     public void MainLoop()
     {
-
         string randomWord = conversion.GetRandom(listOfWords); //stores the random word
         List<char> randomWordList = conversion.ToCharList(randomWord); //creates a list out of the random word
         List<char> hyphenList = conversion.ToListOfSymbols(randomWord, '*'); //stores the list of symbols that will represent the letters in the word
+        bool hintAcquired = false; // initialize the local variable used to break the next loop
 
         int incorrectGuesses = 0; //keeps track of how many times the word is guessed incorrectly
         List<char> incorrectlyGuessedLetters = new List<char>(); //keeps track of the incorrectly guessed letters
         char userInput; // used to store the users input as a character
         bool canHint = true; // can hint if not used, can only use the hint once
 
+        
 
         while (true)
         {
+
             int lettersLeft = conversion.CharListCount(hyphenList, '*'); //gets how many letters are left everytime the game loops (for use in the hints)
 
+
+            Console.Clear();
+            DisplayHangMan(incorrectGuesses);
+            conversion.PrintList(hyphenList);
+            conversion.PrintList(incorrectlyGuessedLetters);
+            
             Console.Write("Type your guess... "); // prompts the user to input
             string userInputString = Console.ReadLine(); //gets the user input as a string
 
@@ -227,19 +235,24 @@ class Hangman
                 Console.WriteLine("\n" + "Sorry to see you go!");
                 break; //exit the game
             }
-
             else if (userInputString == "hint" && canHint == true && lettersLeft != 1) // if they type in hint, they havent tried before, and there's not just one letter left to guess
             {
-                bool hintAcquired = false; // initialize the local variable used to break the next loop
                 while (hintAcquired == false)
                 {
                     int randomIndex = random.Next(randomWord.Length - 1); //get a random number that aligns with the index of the randomword
                     if (hyphenList[randomIndex] == '*') //if the randomized index in the hyphen list is a star, that means the user hasn't guessed this letter yet
                     {
                         Console.WriteLine(randomWord[randomIndex]); //print out that letter
+                        Console.ReadKey();
                         hintAcquired = true; // change this variable to true to break out of the while loop
                     }
                 }
+                canHint = false;
+            }
+            else if (userInputString == "hint" && canHint == false || lettersLeft == 1)
+            {
+                Console.WriteLine("You can't use a hint anymore!");
+                Thread.Sleep(2000);
             }
             else // if the user types in neither of these three things and...
             {
@@ -294,6 +307,7 @@ class Program
         Console.WriteLine("Guess one letter at a time. If you get too many wrong, you lose! If you get them all right, you win!");
         Console.WriteLine("You may type \"guess now\" to guess the entire word in one line if you think you have it correct." + "\n");
         Console.WriteLine("You may also type \"exit\" to exit and \"hint\" to get a hint when you're stuck!");
+        Thread.Sleep(6000);
         Hangman hangman = new Hangman();
         hangman.MainLoop();
         Console.ReadKey();
