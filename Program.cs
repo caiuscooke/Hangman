@@ -259,6 +259,7 @@ class Hangman
                 if (!char.TryParse(userInputString, out userInput)) // if the user's input cant be converted to a char
                 {
                     Console.WriteLine("\n" + "Type one letter at a time only. If you'd like to guess the full word, type \"guess now\" please." + "\n" + "If you'd like to quit, type \"quit\".");
+                    Thread.Sleep(3000);
                 }
                 else // if the users input can be converted to a char
                 {
