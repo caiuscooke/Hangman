@@ -74,10 +74,7 @@ class StringCharManipulation
             }
         }
         return count;
-    } // counts how many chars are in a list of chars
-
-    
-
+    } // counts how many chars are in a list of chars 
 }
 
 class Hangman
@@ -174,6 +171,22 @@ class Hangman
         }
     } // displays 6 different types of hangman boards
 
+    public void BackGroundColor(int wrongGuesses)
+    {
+        switch (wrongGuesses)
+        {
+            case 0 or 1 or 2:
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                break;
+            case 3 or 4:
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                break;
+            case 5 or 6:
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                break;
+        }
+    }
+
     public void MainLoop()
     {
         string randomWord = conversion.GetRandom(listOfWords); //stores the random word
@@ -186,14 +199,11 @@ class Hangman
         char userInput; // used to store the users input as a character
         bool canHint = true; // can hint if not used, can only use the hint once
 
-        
-
         while (true)
         {
-
             int lettersLeft = conversion.CharListCount(hyphenList, '*'); //gets how many letters are left everytime the game loops (for use in the hints)
 
-
+            BackGroundColor(incorrectGuesses);
             Console.Clear();
             DisplayHangMan(incorrectGuesses);
             conversion.PrintList(hyphenList);
