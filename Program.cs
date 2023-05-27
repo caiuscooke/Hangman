@@ -15,7 +15,7 @@
  * Make sense so far? Now let's look at what we'd do in real code.
 */
 
-class StringCharManipulation
+class ListManipulation
 {
     public Random random = new Random();
 
@@ -33,27 +33,7 @@ class StringCharManipulation
         return desiredList[random.Next(0, desiredList.Count - 1)];
     } //gets the random word by searching through the list made by the text doc
 
-    public List<char> ToCharList(string word)
-    {
-        List<char> list = new List<char>();
-        foreach (char letter in word)
-        {
-            list.Add(letter);
-        }
-        return list;
-    } // makes a list out of a string
-
-    public List<char> ToListOfSymbols(string word, char symbols)
-    {
-        List<char> list = new List<char>();
-        foreach (char c in word)
-        {
-            list.Add(symbols);
-        }
-        return list;
-    } // makes a list of symbols for each letter of a word
-
-    public void PrintList(List<char> list)
+    public void PrintCharList(List<char> list)
     {
         foreach (char c in list)
         {
@@ -74,13 +54,37 @@ class StringCharManipulation
             }
         }
         return count;
-    } // counts how many chars are in a list of chars 
+    } // counts how many chars are in a list of chars
+}
+
+class StringManipulation
+{
+    public List<char> ToCharList(string word)
+    {
+        List<char> list = new List<char>();
+        foreach (char letter in word)
+        {
+            list.Add(letter);
+        }
+        return list;
+    } // makes a list out of a string
+
+    public List<char> ToListOfSymbols(string word, char symbols)
+    {
+        List<char> list = new List<char>();
+        foreach (char c in word)
+        {
+            list.Add(symbols);
+        }
+        return list;
+    } // makes a list of symbols for each letter of a word
 }
 
 class Hangman
 {
-    public List<string> listOfWords = File.ReadLines("C:\\Users\\Caius Cooke\\Source\\Repos\\caiuscooke\\Hangman\\Words.txt").ToList();
-    public StringCharManipulation conversion = new StringCharManipulation();
+    public ListManipulation listManipulation = new ListManipulation();
+    public StringManipulation stringManipulation = new StringManipulation();
+    private string directory = Directory.GetCurrentDirectory();
     public Random random = new Random();
 
     public void DisplayHangMan(int incorrectGuesses)
@@ -121,8 +125,8 @@ class Hangman
                 Console.WriteLine("|");
                 Console.WriteLine("==================");
                 break;
-        
-            case(3):
+
+            case (3):
                 Console.WriteLine("==================");
                 Console.WriteLine("|              |");
                 Console.WriteLine("|              0");
@@ -189,9 +193,11 @@ class Hangman
 
     public void MainLoop()
     {
-        string randomWord = conversion.GetRandom(listOfWords); //stores the random word
-        List<char> randomWordList = conversion.ToCharList(randomWord); //creates a list out of the random word
-        List<char> hyphenList = conversion.ToListOfSymbols(randomWord, '*'); //stores the list of symbols that will represent the letters in the word
+        Console.WriteLine(directory);
+        List<string> listOfWords = File.ReadLines(Path.Join(directory, "Words.txt")).ToList();
+        string randomWord = listManipulation.GetRandom(listOfWords); //stores the random word
+        List<char> randomWordList = stringManipulation.ToCharList(randomWord); //creates a list out of the random word
+        List<char> hyphenList = stringManipulation.ToListOfSymbols(randomWord, '*'); //stores the list of symbols that will represent the letters in the word
         bool hintAcquired = false; // initialize the local variable used to break the next loop
 
         int incorrectGuesses = 0; //keeps track of how many times the word is guessed incorrectly
@@ -201,27 +207,16 @@ class Hangman
 
         while (true)
         {
-            int lettersLeft = conversion.CharListCount(hyphenList, '*'); //gets how many letters are left everytime the game loops (for use in the hints)
+            int lettersLeft = listManipulation.CharListCount(hyphenList, '*'); //gets how many letters are left everytime the game loops (for use in the hints)
 
             BackGroundColor(incorrectGuesses);
             Console.Clear();
             DisplayHangMan(incorrectGuesses);
-            conversion.PrintList(hyphenList);
-            conversion.PrintList(incorrectlyGuessedLetters);
-            
+            listManipulation.PrintCharList(hyphenList);
+            listManipulation.PrintCharList(incorrectlyGuessedLetters);
+
             Console.Write("Type your guess... "); // prompts the user to input
             string userInputString = Console.ReadLine(); //gets the user input as a string
-
-            if (incorrectGuesses > 2 && incorrectGuesses <= 4) //changes background color to yellow if you have 3 or 4 wrong guesses
-            {
-                Console.BackgroundColor = ConsoleColor.DarkYellow;
-                Console.Clear();
-            }
-            else if (incorrectGuesses > 4 && incorrectGuesses <= 6) //changes background color if you have 5 or 6 wrong guesses
-            {
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.Clear();
-            }
 
             if (userInputString == "guess now") //if the user types in guess now
             {
@@ -234,7 +229,7 @@ class Hangman
                 }
                 else //if its not matching the answer
                 {
-                    Console.WriteLine("\n" + "Too bad!!"); 
+                    Console.WriteLine("\n" + "Too bad!!");
                     DisplayHangMan(6); //make the score max out
                     Console.WriteLine($"The correct word was {randomWord}."); //displays the word
                     break; //ends the game
@@ -259,7 +254,7 @@ class Hangman
                 }
                 canHint = false;
             }
-            else if (userInputString == "hint" && canHint == false || lettersLeft == 1)
+            else if (userInputString == "hint" && canHint == false)
             {
                 Console.WriteLine("You can't use a hint anymore!");
                 Thread.Sleep(2000);
