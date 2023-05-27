@@ -18,7 +18,7 @@
 public class Hangman
 {
     private Random random = new Random();
-    public List<string> words = File.ReadLines("C:\\Users\\cooke\\source\\repos\\CalculatorImproved\\Words.txt").ToList();
+    public List<string> words = File.ReadLines("C:\\Users\\cooke\\source\\repos\\Hangman\\Words.txt").ToList();
 
     public string GetRandomWord(List<string> list)
     {
@@ -310,6 +310,7 @@ class Program
         Console.WriteLine("Welcome to Hangman!\n");
         Console.WriteLine("Guess one letter at a time. If you get too many wrong, you lose! If you get them all right, you win!");
         Console.WriteLine("You may type \"guess now\" to guess the entire word in one line if you think you have it correct." + "\n");
+        Console.WriteLine("You may also type \"exit\" to exit and \"hint\" to get a hint when you're stuck!");
         Hangman hangman = new Hangman();
         hangman.MainLoop();
         Console.ReadKey();
